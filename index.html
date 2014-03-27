@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>jQuery.htmlEncodedVal()</title>
+	</head>
+	<body>
+
+		<label>Type your string here (this is what you want to encode):</label><br>
+		<textarea id="inputStr" style="width: 35%; height: 75px;"></textarea>
+
+		<br>
+		<br>
+
+		<label>What should I do?</label><br>
+		<select id="conversionType">
+
+			<optgroup label="getters ( like $('#elem').val() )">
+				<option value="get-encoded-value">Get an html encoded string</option>
+				<option value="get-encoded-value-protect-html">Get an html encoded string, but protect any html</option>
+			</optgroup>
+
+			<optgroup label="inline encoding (maybe you want to encode the field before you submit the form)">
+				<option value="encoded-value-inline">Encode the string where you typed it</option>
+				<option value="encoded-value-inline-protect-html">Encode the string where you typed it, but protect any html</option>
+			</optgroup>
+
+			<optgroup label="setters ( like $('#elem').val( some_value ) )">
+				<option value="set-encoded-value">Set a field value, but encode it first</option>
+				<option value="set-encoded-value-protect-html">Set a field value, but encode it first, and protect any html</option>
+			</optgroup>
+		</select>
+
+		<br>
+		<br>
+
+		<button id="convertBtn">Make it so!</button>
+
+		<br>
+		<br>
+
+
+		<label>Your encoded value</label><br>
+		<textarea id="outputStr" style="width: 35%; height: 75px;"></textarea>
+
+		<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script src="jquery.htmlEncodedVal.min.js"></script>
+		<script>
+			$(window).load( function() {
+
+				// when you click the convert button
+				$("#convertBtn").click( function() {
+
+					// get the type of conversion
+					var convType = $("#conversionType").val(),
+					// and prepare for our returned value (if any)
+					returnVal = "";
+
+					// GETTERS
+					// if we are just getting the html encoded value....
+					if ( convType === "get-encoded-value" ) {
+
+						// set our return value
+						returnVal = $("#inputStr").htmlEncodedVal();
+
+						alert( "Your encoded value is: " + returnVal );
+
+					// if we are protecting html from being encoded
+					} else if ( convType === "get-encoded-value-protect-html" ) {
+
+						// set our return value, but tell it to leave any existing html as-is
+						returnVal = $("#inputStr").htmlEncodedVal( true );
+
+						alert( "Your encoded value is: " + returnVal );
+
+					// INLINE ENCODING
+					// You might want to do this to your form fields right before the form is submitted
+					} else if ( convType === "encoded-value-inline" ) {
+
+						// inline conversion
+						// you could also use: $("#inputStr").htmlEncodedVal( false, true );
+						$("#inputStr").htmlEncodedVal( { convertInline: true } );
+
+					// same thing, but protect the html
+					} else if ( convType === "encoded-value-inline-protect-html" ) {
+
+						// you could also use: $("#inputStr").htmlEncodedVal( retainHTML: true, convertInline: true );
+						$("#inputStr").htmlEncodedVal( true, true );
+
+					// SETTERS
+					// if we are setting a field to a value, and encoding it on the way in
+					} else if ( convType === "set-encoded-value" ) {
+
+						// set the value for the output text area
+						$("#outputStr").htmlEncodedVal( $("#inputStr").val() );
+
+					// same thing, but protect the html
+					} else if ( convType === "set-encoded-value-protect-html" ) {
+
+						// set the value for the output text area
+						// you could also use: $("#outputStr").htmlEncodedVal( $("#inputStr").val(), { retainHTML: true } );
+						$("#outputStr").htmlEncodedVal( $("#inputStr").val(), true );
+
+					}
+
+				} );
+			} );
+		</script>
+	</body>
+</html>
